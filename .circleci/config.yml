@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build-image:
+  build-test-publish:
     machine:
       image: ubuntu-2004:202008-01
     steps:
@@ -33,9 +33,9 @@ jobs:
 
 workflows:
   version: 2
-  build:
+  build-test-publish-deploy:
     jobs:
-      - build-image:
+      - build-test-publish:
           context: cyberdojo-context
           filters:
             branches:

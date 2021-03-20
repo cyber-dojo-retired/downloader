@@ -112,9 +112,9 @@ The git commit sha used to create the Docker image.
 
     {
       "exception": {
-        "path": "/group_create_custom",
+        "path": "/download_group",
         "body": "",
-        "class": "CreatorService",
+        "class": "DownloaderService",
         "message": "...",
         "backtrace": [
           ...

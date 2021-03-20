@@ -39,7 +39,7 @@ workflows:
           context: cyberdojo-context
           filters:
             branches:
-              only: [ master ]
+              only: [ main ]
       - deploy-to-beta:
           context: cyberdojo-context
           requires: [ build-image ]

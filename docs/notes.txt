@@ -10,5 +10,13 @@ The .tgz file when unzipped will produce a directory with a git repo in it.
   $ git remote add origin git@github.com:user/repo.git
   $ git push push origin main
   
-- What should the branch names be for download_group()?
-   - 
+- What are the branch names for download_group()?
+     individual-id + group-name 
+   eg   
+   - Es72La-alligator
+   - 886Ww4-gorilla
+   - etc
+   
+- I cannot use simple integer tags for each traffic-light
+  since tags have to be unique at the repo level not the branch level.
+  So drop tags until they prove useful in some way.

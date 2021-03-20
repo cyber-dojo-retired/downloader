@@ -18,9 +18,29 @@ class DownloaderTestBase < Id58TestBase
     @externals ||= Externals.new
   end
 
-  private
+  def prober
+    @prober ||= Prober.new(externals)
+  end
 
   def model
+    # local because tests need more of model's API.
+    @model ||= ::Test::ModelService.new
+  end
+
+  def disk
+    externals.disk
+  end
+
+  def git
+    externals.git
+  end
+
+  def shell
+    externals.shell
+  end
+
+
+  def X_model
     externals.model
   end
 

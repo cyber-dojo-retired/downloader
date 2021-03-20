@@ -9,7 +9,7 @@ build_tagged_images()
     build_images
     tag_images_to_latest
     check_embedded_env_var
-	exit 0
+    exit 0
   fi
 }
 

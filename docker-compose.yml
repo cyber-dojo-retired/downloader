@@ -1,0 +1,39 @@
+
+# This is augmented with dependent services by
+# sh/augmented_docker_compose.sh
+
+version: '3.7'
+
+services:
+
+  client:
+    build:
+      args: [ COMMIT_SHA ]
+      context: source/client
+    image: ${CYBER_DOJO_DOWNLOADER_CLIENT_IMAGE}:${CYBER_DOJO_DOWNLOADER_TAG}
+    container_name: ${CYBER_DOJO_DOWNLOADER_CLIENT_CONTAINER_NAME}
+    env_file: [ .env ]
+    ports: [ "${CYBER_DOJO_DOWNLOADER_CLIENT_PORT}:${CYBER_DOJO_DOWNLOADER_CLIENT_PORT}" ]
+    user: ${CYBER_DOJO_DOWNLOADER_CLIENT_USER}
+    read_only: true
+    restart: "no"
+    tmpfs: /tmp
+    volumes: [ "./test:/test/:ro" ]
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  downloader:
+    build:
+      args: [ COMMIT_SHA ]
+      context: source/server
+    image: ${CYBER_DOJO_DOWNLOADER_IMAGE}:${CYBER_DOJO_DOWNLOADER_TAG}
+    container_name: ${CYBER_DOJO_DOWNLOADER_SERVER_CONTAINER_NAME}
+    env_file: [ .env ]
+    ports: [ "${CYBER_DOJO_DOWNLOADER_PORT}:${CYBER_DOJO_DOWNLOADER_PORT}" ]
+    user: ${CYBER_DOJO_DOWNLOADER_SERVER_USER}
+    depends_on:
+      - model
+    read_only: true
+    restart: "no"
+    tmpfs: /tmp
+    volumes: [ "./test:/test/:ro" ]

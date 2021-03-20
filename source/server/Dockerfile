@@ -1,6 +1,8 @@
 FROM cyberdojo/sinatra-base:0fcdde3
 LABEL maintainer=jon@jaggersoft.com
 
+RUN apk --update --upgrade --no-cache add git
+
 WORKDIR /app
 COPY --chown=nobody:nogroup . .
 

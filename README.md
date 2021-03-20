@@ -11,8 +11,8 @@ API
 * [GET alive](docs/api.md#get-alive)  
 * [GET ready](docs/api.md#get-ready)
 * [GET sha](docs/api.md#get-sha)
-* [GET download_kata(id)](docs/api.md#download_kataid)
-* [GET download_group(id)](docs/api.md#download_groupid)
+* [GET download_kata(id)](docs/api.md#get-download_kataid)
+* [GET download_group(id)](docs/api.md#get-download_groupid)
 
 ***
 

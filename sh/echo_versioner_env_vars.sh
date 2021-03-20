@@ -8,6 +8,9 @@ echo_versioner_env_vars()
   echo CYBER_DOJO_DOWNLOADER_SHA="$(get_image_sha)"
   echo CYBER_DOJO_DOWNLOADER_TAG="$(get_image_tag)"
   #
+  echo CYBER_DOJO_DOWNLOADER_IMAGE=cyberdojo/downloader
+  echo CYBER_DOJO_DOWNLOADER_PORT=4587
+  #
   echo CYBER_DOJO_DOWNLOADER_CLIENT_IMAGE=cyberdojo/client
   echo CYBER_DOJO_DOWNLOADER_CLIENT_PORT=9999
   #

@@ -3,6 +3,7 @@
 - The source for the [cyberdojo/downloader](https://hub.docker.com/r/cyberdojo/downloader/tags) Docker image.
 - A docker-containerized micro-service for [https://cyber-dojo.org](https://cyber-dojo.org).
 - An http service (rack based) for downloading cyber-dojo practice sessions as git repositories.
+- Work in progress. Not live.
 
 ***
 API

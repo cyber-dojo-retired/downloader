@@ -6,7 +6,7 @@ export SH_DIR="${ROOT_DIR}/sh"
 source "${SH_DIR}/augmented_docker_compose.sh"
 source "${SH_DIR}/build_tagged_images.sh"
 source "${SH_DIR}/containers_down.sh"
-#source "${SH_DIR}/containers_up_healthy_and_clean.sh"
+source "${SH_DIR}/containers_up_healthy_and_clean.sh"
 #source "${SH_DIR}/copy_in_saver_test_data.sh"
 source "${SH_DIR}/exit_non_zero_unless_installed.sh"
 source "${SH_DIR}/exit_zero_if_build_only.sh"
@@ -25,7 +25,7 @@ exit_non_zero_unless_installed docker-compose
 remove_old_images
 build_tagged_images
 exit_zero_if_build_only "$@"
-#server_up_healthy_and_clean
+server_up_healthy_and_clean
 #client_up_healthy_and_clean "$@"
 #copy_in_saver_test_data
 #test_in_containers "$@"

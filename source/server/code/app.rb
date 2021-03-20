@@ -25,24 +25,31 @@ class App < AppBase
   # - - - - - - - - - - - - - - - - - - - - -
 
   get '/download_kata', provides:[:json] do
+    name = 'download_kata'
     respond_to { |wants|
       wants.json {
-
+        Dir.mktmpdir(id, '/tmp') do |tmp_dir|
+          args = json_args
+          args[:tmp_dir] = tmp_dir
+          result = { name => downloader.public_send(name, **args) }
+          json(result)
+        end
       }
     }
   end
 
   get '/download_group', provides:[:json] do
+    name = 'download_group'
     respond_to { |wants|
       wants.json {
-
+        Dir.mktmpdir(id, '/tmp') do |tmp_dir|
+          args = json_args
+          args[:tmp_dir] = tmp_dir
+          result = { name => downloader.public_send(name, **args) }
+          json(result)
+        end
       }
     }
-  end
-
-
-  def model
-    externals.model
   end
 
 end

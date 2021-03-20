@@ -5,8 +5,13 @@ echo_versioner_env_vars()
 {
   docker run --rm cyberdojo/versioner:latest
   #
-  echo CYBER_DOJO_DOWNLOADER_SHA="$(get_image_sha)"
-  echo CYBER_DOJO_DOWNLOADER_TAG="$(get_image_tag)"
+  echo CYBER_DOJO_DOWNLOADER_SHA="$(get_image_sha)"  
+  # 
+  if [ "${1:-}" == '-bo' ]; then
+	  echo CYBER_DOJO_DOWNLOADER_TAG="$(get_image_tag)"
+  else
+	  echo CYBER_DOJO_DOWNLOADER_TAG=latest	  
+  fi    
   #
   echo CYBER_DOJO_DOWNLOADER_IMAGE=cyberdojo/downloader
   echo CYBER_DOJO_DOWNLOADER_PORT=4587

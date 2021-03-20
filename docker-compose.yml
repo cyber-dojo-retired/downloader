@@ -18,9 +18,10 @@ services:
     read_only: true
     restart: "no"
     tmpfs: /tmp
-    volumes: [ "./test:/test/:ro" ]
+    volumes:
+      - ./test:/test/:ro
+      - ./source/client:/app:ro
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   downloader:
     build:
@@ -36,4 +37,6 @@ services:
     read_only: true
     restart: "no"
     tmpfs: /tmp
-    volumes: [ "./test:/test/:ro" ]
+    volumes:
+      - ./test:/test/:ro
+      - ./source/server:/app:ro

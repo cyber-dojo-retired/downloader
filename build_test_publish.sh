@@ -16,7 +16,7 @@ source "${SH_DIR}/remove_old_images.sh"
 source "${SH_DIR}/test_in_containers.sh"
 
 source "${SH_DIR}/echo_versioner_env_vars.sh"
-export $(echo_versioner_env_vars)
+export $(echo_versioner_env_vars "$@")
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 exit_zero_if_show_help "$@"

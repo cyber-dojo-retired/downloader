@@ -42,7 +42,7 @@ workflows:
               only: [ main ]
       - deploy-to-beta:
           context: cyberdojo-context
-          requires: [ build-image ]
+          requires: [ build-test-publish ]
       - approve-to-prod:
           type: approval
           requires: [ deploy-to-beta ]

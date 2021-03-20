@@ -34,8 +34,8 @@ module External
 
     SETUP = [
       'git init --quiet',
-      "git config user.name 'differ'",
-      "git config user.email 'differ@cyber-dojo.org'"
+      "git config user.name 'downloader'",
+      "git config user.email 'downloader@cyber-dojo.org'"
     ].join(' && ').freeze
 
     def self.add_commit_tag(n)

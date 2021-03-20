@@ -17,8 +17,8 @@ class ExternalGitterTest < DownloaderTestBase
   'git.setup' do
     expected = [
       'git init --quiet',
-      "git config user.name 'differ'",
-      "git config user.email 'differ@cyber-dojo.org'"
+      "git config user.name 'downloader'",
+      "git config user.email 'downloader@cyber-dojo.org'"
     ].join(' && ')
     git.setup(path)
     assert_shell(expected)

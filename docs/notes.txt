@@ -20,3 +20,65 @@ The .tgz file when unzipped will produce a directory with a git repo in it.
 - I cannot use simple integer tags for each traffic-light
   since tags have to be unique at the repo level not the branch level.
   So drop tags until they prove useful in some way.
+
+
+# - - - - - - - - - - - - - - - - - - - - - - -
+
+def download_kata(id, git_dir)
+  if !model.kata_exists?(id)
+    ...
+  end
+  gitter.setup(git_dir)
+  manifest = model.kata_manifest(id)
+  events = model.kata_events(id)
+  events.each do |e|
+    index = e['index']
+    event = model.kata_event(id, index)
+    save_event(git_dir, event)
+    gitter.commit(git_dir)    
+  end
+  # create tgz file of git_dir
+end
+
+
+def save_event(git_dir, event)
+  remove_all_content_from(git_dir)
+  # mkdir tmp_dir/sandbox
+  sandbox = {}
+  files = event.delete('files')
+  files.each do |pathed_filename,content|
+    sandbox["sandbox/{pathed_filename}"] = content    
+  end
+  save(git_dir, sandbox)
+  sss = {}
+  sss['stdout'] = event.delete('stdout')
+  sss['stderr'] = event.delete('stderr')
+  sss['status'] = event.delete('status')
+  save(git_dir, sss)
+  save(git_dir, { "event.json" => event })
+end
+
+
+def save(dir_name, files)
+  files.each do |pathed_filename, content|
+    path = File.dirname(pathed_filename)
+    src_dir = dir_name + '/' + path
+    unless path === '.'
+      shell.assert_exec("mkdir -vp #{src_dir}")
+    end
+    disk.write(dir_name + '/' + pathed_filename, content)
+  end
+end
+
+def gitter.commit(git_dir)
+  commit = [
+    'git add .',
+    "git commit --allow-empty --all --quiet --allow-empty-message -m ''"
+  ].join(' && ').freeze
+  shell.assert_cd_exec(git_dir, commit)    
+end
+
+# - - - - - - - - - - - - - - - - - - - - - - -
+
+def download_group(id, tmp_dir)
+end

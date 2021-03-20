@@ -7,11 +7,11 @@ class Downloader
   end
 
   def download_kata(id:)
-    #...
+    # ...
   end
 
   def download_group(id:)
-    #...
+    # ...
   end
 
   private

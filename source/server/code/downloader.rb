@@ -8,10 +8,12 @@ class Downloader
 
   def download_kata(id:, tmp_dir:)
     # ...
+    [ "#{id}.tgz", "content" ]
   end
 
   def download_group(id:, tmp_dir:)
     # ...
+    [ "#{id}.tgz", "content" ]
   end
 
   private

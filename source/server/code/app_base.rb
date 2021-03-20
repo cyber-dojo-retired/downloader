@@ -20,16 +20,36 @@ class AppBase < Sinatra::Base
 
   private
 
-  def self.get_delegate(klass, name)
-    get "/#{name}", provides:[:json] do
+  def self.get_prober(name)
+    get "/#{method}", provides:[:json] do
       respond_to do |format|
         format.json {
-          target = klass.new(@externals)
-          result = target.public_send(name, params)
-          json({ name => result })
+          result = prober.public_send(method, params)
+          json({ method => result })
         }
       end
     end
+  end
+
+  def self.get_octet_stream(name)
+    get "/#{method}" do
+      args = json_args
+      Dir.mktmpdir(args[:id], '/tmp') do |tmp_dir|
+        args[:tmp_dir] = tmp_dir
+        tgz_name, tgz_content = *downloader.public_send(method, **args)
+        response.headers['content_type'] = "application/octet-stream"
+        attachment(tgz_name)
+        response.write(tgz_content)
+      end
+    end
+  end
+
+  def prober
+    Prober.new(@externals)
+  end
+
+  def downloader
+    Downloader.new(@externals)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - -

@@ -18,38 +18,11 @@ class App < AppBase
 
   # - - - - - - - - - - - - - - - - - - - - -
 
-  get_delegate(Prober, :sha)
-  get_delegate(Prober, :alive?)
-  get_delegate(Prober, :ready?)
+  get_prober(:sha)
+  get_prober(:alive?)
+  get_prober(:ready?)
 
-  # - - - - - - - - - - - - - - - - - - - - -
-
-  get '/download_kata', provides:[:json] do
-    name = 'download_kata'
-    respond_to { |wants|
-      wants.json {
-        Dir.mktmpdir(id, '/tmp') do |tmp_dir|
-          args = json_args
-          args[:tmp_dir] = tmp_dir
-          result = { name => downloader.public_send(name, **args) }
-          json(result)
-        end
-      }
-    }
-  end
-
-  get '/download_group', provides:[:json] do
-    name = 'download_group'
-    respond_to { |wants|
-      wants.json {
-        Dir.mktmpdir(id, '/tmp') do |tmp_dir|
-          args = json_args
-          args[:tmp_dir] = tmp_dir
-          result = { name => downloader.public_send(name, **args) }
-          json(result)
-        end
-      }
-    }
-  end
+  get_octet_stream(:download_kata)
+  get_octet_stream(:download_group)
 
 end

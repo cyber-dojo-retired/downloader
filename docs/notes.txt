@@ -4,6 +4,9 @@ with additional files from differ.
 - How will model implement its v2 ?
   It will still need to delegate to saver.
   So saver will need a 'batch' API 
+  I think I will still need the kata_event(id, index) functionality.
+  Eg for progress? on the dashboard.
+  use [git archive] and [git ls-tree]
 
 - TODOS
   1. Add model's API to saver.
@@ -13,9 +16,14 @@ with additional files from differ.
   -
   A. Decouple dashboard from saver so it uses only model.  
   -
-  i. Add v2 storage to saver that stores directly in git format.
-  ii. Add kata_git_diff() to saver and use in differ service.
+    i. Add v2 storage to saver that stores directly in git format.
+   ii. Add kata_git_diff() to saver and use in differ service.
+       It can do git diff directly      
   iii. Add kata_git_repo_tgz() to saver and offer download option in UI
+       It can do tar directly
+   iv. Refactor kata_event(id, index)
+       It can use [git archive] to get tar file, pipe to untar, into /tmp
+	   To get names of files use [git ls-tree -r TAG]
 
 - Don't offer download_group()
   Instead, from a group allow selection of avatar from 8x8 grid (similar to joining)

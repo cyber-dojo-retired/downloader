@@ -81,7 +81,8 @@ class Downloader
     command = [
       "cd #{git_dir}",
       'git add .',
-      "git commit --allow-empty --all --message #{index} --quiet"
+      "git commit --allow-empty --all --message #{index} --quiet",
+      "git tag #{index} HEAD"
     ].join(' && ')
     shell.assert_exec(command)
   end

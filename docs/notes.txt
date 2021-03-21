@@ -1,138 +1,19 @@
 The initial file-structure for this repo was copied from creator
 with additional files from differ.
 
+Don't offer download_group()
+Instead, from a group allow selection of avatar from 8x8 grid (similar to joining)
 
 The .tgz file when unzipped will produce a directory with a git repo in it.
 
+- Do I want to save the manifest in the tgz?
+
 - What should the directory be called?
    individual: cyber-dojo-2021-03-14-DfH8sP-FizzBuzz
-        group: cyber-dojo-2021-03-14-SS67eJ-FizzBuzz
+   from-group: cyber-dojo-2021-03-14-SS67eJ-lion-FizzBuzz
         
 - How to provide instructions on pushing the repo to a remote, eg github?
   $ git remote add origin git@github.com:user/repo.git
-  $ git push origin main
-  
-- What are the branch names for download_group()?
-     individual-id + avatar-name 
-   eg   
-   - Es72La-alligator
-   - 886Ww4-gorilla
-   - etc
-   
-- I cannot use simple integer tags for each traffic-light
-  since tags have to be unique at the repo level not the branch level.
-  So drop tags until they prove useful in some way?
-  Or use branch-name with the index as a suffix?
-  Or maybe use that as the commit message?
-     Es72La-alligator-1
-     Es72La-alligator-2
-     Es72La-alligator-3
+  $ git push origin main  
 
 
-# - - - - - - - - - - - - - - - - - - - - - - -
-
-def download_kata(git_dir, id)
-  if !model.kata_exists?(id)
-    ...
-  end
-  git_init(git_dir)
-  manifest = model.kata_manifest(id)
-  events = model.kata_events(id)
-  events.each do |e|
-    index = e['index']
-    event = model.kata_event(id, index)
-    save_event(git_dir, id, event)
-    git_commit(git_dir, index)    
-  end
-  tgz_filename = "cyber-dojo-#{when}-#{id}"
-  [ tgz_filename, tgz_content(git_dir, id) ]
-end
-
-def when
-  t = Time.now
-  year  = "%04d" % t.year
-  month = "%02d" % t.month
-  day   = "%02d" % t.day
-  "#{year}-#{month}-#{day}"
-end
-
-def save_event(git_dir, id, event)
-  remove_all_content_from(git_dir, id)
-  sandbox = {}
-  files = event.delete('files')
-  files.each do |pathed_filename,content|
-    sandbox["sandbox/{pathed_filename}"] = content    
-  end
-  save(git_dir, sandbox)
-  sss = {}
-  sss['stdout'] = event.delete('stdout')
-  sss['stderr'] = event.delete('stderr')
-  sss['status'] = event.delete('status')
-  save(git_dir, sss)
-  save(git_dir, { "event.json" => event })
-end
-
-def remove_all_content_from(git_dir, id)
-  Dir.mktmpdir(id, '/tmp') do |tmp_dir|
-    shell.assert_exec(
-      "mv #{git_dir}/.git #{tmp_dir}",
-      "rm -rf #{git_dir}",
-      "mkdir -p #{git_dir}",
-      "mv #{tmp_dir}/.git #{git_dir}"
-    )
-  end
-end
-
-def save(git_dir, files)
-  files.each do |pathed_filename, content|
-    path = File.dirname(pathed_filename)
-    source_dir = "#{git_dir}/#{path}"
-    unless path === '.'
-      shell.assert_exec("mkdir -vp #{source_dir}")
-    end
-    disk.write(source_dir, content)
-  end
-end
-
-def git_init(git_dir)
-  command = [
-    "cd #{git_dir}",
-    'git init --quiet',
-    "git config user.name 'downloader'",
-    "git config user.email 'downloader@cyber-dojo.org'"
-  ].join(' && ')
-  shell.assert_exec(command)
-end
-
-def git_commit(git_dir, index)
-  command = [
-    "cd #{git_dir}",
-    'git add .',
-    "git commit --allow-empty --all --quiet  -m '#{index}'"
-  ].join(' && ').freeze
-  shell.assert_exec(command)    
-end
-
-def tgz_content(git_dir, id)
-  Dir.mktmpdir(id, '/tmp') do |tmp_dir|
-    tgz_filename = "#{tmp_dir}/download.tgz"
-    command = "tar -zcf #{tgz_filename} #{git_dir}"
-    shell.assert_exec(command)
-    File.binread(tgz_filename)
-  end
-end
-
-# - - - - - - - - - - - - - - - - - - - - - - -
-
-def download_group(git_dir, id)
-  if !model.group_exists?(id)
-    ...
-  end
-  git_init(git_dir)
-  # make an initial empty commit
-  # make a branch for each avatar off initial empty commit
-  # for each avatar
-  #   checkout its branch
-  #   for each avatar-event
-  #     git-commit it
-end

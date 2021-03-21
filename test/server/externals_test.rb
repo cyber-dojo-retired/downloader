@@ -7,15 +7,8 @@ class ExternalsTest < DownloaderTestBase
   end
 
   test '920',
-  'default disk is ExternalDiskWriter' do
-    assert_equal External::DiskWriter, disk.class
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
-  test 'C8F',
-  'default git is ExternalGitter' do
-    assert_equal External::Gitter, git.class
+  'default disk is ExternalDisk' do
+    assert_equal External::Disk, disk.class
   end
 
   # - - - - - - - - - - - - - - - - -

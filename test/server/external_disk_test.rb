@@ -1,6 +1,6 @@
 require_relative 'downloader_test_base'
 
-class ExternalDiskWriterTest < DownloaderTestBase
+class ExternalDiskTest < DownloaderTestBase
 
   def self.id58_prefix
     'FDF'

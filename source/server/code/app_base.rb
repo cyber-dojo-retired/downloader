@@ -1,8 +1,10 @@
 # frozen_string_literal: true
-require_relative 'silently'
-require 'sinatra/base'
-silently { require 'sinatra/contrib' } # N x "warning: method redefined"
+require_relative 'downloader'
+require_relative 'prober'
 require_relative 'http_json_hash/service'
+require 'sinatra/base'
+require_relative 'silently'
+silently { require 'sinatra/contrib' } # N x "warning: method redefined"
 require 'json'
 require 'sprockets'
 
@@ -21,26 +23,22 @@ class AppBase < Sinatra::Base
   private
 
   def self.get_prober(name)
-    get "/#{method}", provides:[:json] do
+    get "/#{name}", provides:[:json] do
       respond_to do |format|
         format.json {
-          result = prober.public_send(method, params)
-          json({ method => result })
+          result = prober.public_send(name, **json_args)
+          json({ name => result })
         }
       end
     end
   end
 
   def self.get_octet_stream(name)
-    get "/#{method}" do
-      args = json_args
-      Dir.mktmpdir(args[:id], '/tmp') do |tmp_dir|
-        args[:tmp_dir] = tmp_dir
-        tgz_name, tgz_content = *downloader.public_send(method, **args)
-        response.headers['content_type'] = "application/octet-stream"
-        attachment(tgz_name)
-        response.write(tgz_content)
-      end
+    get "/#{name}" do
+      tgz_name, tgz_bytes = *downloader.public_send(name, **json_args)
+      response.headers['content_type'] = "application/octet-stream"
+      attachment(tgz_name)
+      response.write(tgz_bytes)
     end
   end
 

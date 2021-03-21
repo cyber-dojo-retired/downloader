@@ -6,8 +6,7 @@ module External
 
   class Sheller
 
-    def assert_cd_exec(path, *commands)
-      assert_exec(["cd #{path}"] + commands)
+    def initialize(_externals)
     end
 
     def assert_exec(*commands)

@@ -7,11 +7,11 @@ require_relative 'external/sheller'
 class Externals
 
   def disk
-    @disk ||= External::Disk.new
+    @disk ||= External::Disk.new(self)
   end
 
   def shell
-    @shell ||= External::Sheller.new
+    @shell ||= External::Sheller.new(self)
   end
 
   # - - - - - - - - - - - - - - - - -

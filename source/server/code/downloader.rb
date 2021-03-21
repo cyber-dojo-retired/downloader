@@ -10,7 +10,11 @@ class Downloader
     if !model.kata_exists?(id)
       fail "Cannot find a practice session with id #{id}"
     end
-    disk.tmp_dir(id, '/tmp') do |git_dir|
+    manifest = model.kata_manifest(id)
+    created = manifest['created']
+    disk.tmp_dir(id, '/tmp') do |tmp_dir|
+      dir_name = "cyber-dojo-#{at(created)}-#{id}"
+      git_dir = "#{tmp_dir}/#{dir_name}"
       git_init(git_dir)
       events = model.kata_events(id)
       events.each do |e|
@@ -19,8 +23,7 @@ class Downloader
         save_event(git_dir, id, event)
         git_commit(git_dir, index)
       end
-      tgz_filename = "cyber-dojo-#{at}-#{id}"
-      [ tgz_filename, tgz_bytes(git_dir, id) ]
+      tgz(tmp_dir, dir_name, id)
     end
   end
 
@@ -42,12 +45,8 @@ class Downloader
     save(git_dir, { "event.json": event })
   end
 
-  def at
-    t = Time.now
-    year  = "%04d" % t.year
-    month = "%02d" % t.month
-    day   = "%02d" % t.day
-    "#{year}-#{month}-#{day}"
+  def at(t)
+    "#{t[0]}-#{t[1]}-#{t[2]}"
   end
 
   def remove_all_content_from(git_dir, id)
@@ -63,17 +62,13 @@ class Downloader
 
   def save(git_dir, files)
     files.each do |pathed_filename, content|
-      path = File.dirname(pathed_filename)
-      source_dir = "#{git_dir}/#{path}"
-      unless path === '.'
-        shell.assert_exec("mkdir -vp #{source_dir}")
-      end
-      disk.write(source_dir, content)
+      disk.write("#{git_dir}/#{pathed_filename}", content)
     end
   end
 
   def git_init(git_dir)
     command = [
+      "mkdir -vp #{git_dir}",
       "cd #{git_dir}",
       'git init --quiet',
       "git config user.name 'downloader'",
@@ -91,12 +86,12 @@ class Downloader
     shell.assert_exec(command)
   end
 
-  def tgz_bytes(git_dir, id)
-    dir.tmp_dir(id, '/tmp') do |tmp_dir|
-      tgz_filename = "#{tmp_dir}/download.tgz"
-      command = "tar -zcf #{tgz_filename} #{git_dir}"
+  def tgz(base_dir, git_dir, id)
+    disk.tmp_dir(id, '/tmp') do |tmp_dir|
+      tgz_filename = "#{tmp_dir}/#{git_dir}.tgz"
+      command = "tar -C #{base_dir} -zcf #{tgz_filename} #{git_dir}"
       shell.assert_exec(command)
-      disk.binread(tgz_filename)
+      [tgz_filename, disk.binread(tgz_filename)]
     end
   end
 

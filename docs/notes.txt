@@ -1,9 +1,51 @@
 The initial file-structure for this repo was copied from creator
 with additional files from differ.
 
-Don't offer download_group()
-Instead, from a group allow selection of avatar from 8x8 grid (similar to joining)
-  
+- How will model implement its v2 ?
+  It will still need to delegate to saver.
+  So saver will need a 'batch' API 
+
+- TODOS
+  1. Add model's API to saver.
+  2. All clients can now call saver rather than model (one less network hop)
+  3. Model can delegate to saver.
+  4. Model can be dropped.
+  -
+  A. Decouple dashboard from saver so it uses only model.  
+  -
+  i. Add v2 storage to saver that stores directly in git format.
+  ii. Add kata_git_diff() to saver and use in differ service.
+  iii. Add kata_git_repo_tgz() to saver and offer download option in UI
+
+- Don't offer download_group()
+  Instead, from a group allow selection of avatar from 8x8 grid (similar to joining)
+
+- Q96 test runs in ~0.3s
+  This shows that generating the git repo on-the-fly is not feasible. Too slow.
+  I need to extend model with v2 that saves directly in git format.
+  Then model can expose two new API methods
+     kata_git_repo_tgz(id)
+	   This is stateless. Just create a tgz file in /tmp
+	   It can only be offered (from UI) for version 2 katas initially.
+	   Later I can provide a migration for v0,v1 repos. 
+  	 kata_git_diff(id, was_index, now_index)
+	   This can be stateless too.
+	   I just need to use the same trick as differ, get massive context around
+	   the diffs so you get the entire files. Don't process the [git diff]
+	   output in model at all. Let the differ service do that.
+    
+- This might change the model API slightly.
+  Currently it offers...
+    kata_events(id)
+	   This will still be needed for dashboard and web.
+	   So /events.json will still need to be saved as meta data
+	   Confirms that a /sandbox dir for the users files.
+	kata_event(id, index)	
+	   I don't think this will be needed.
+	   Diff-summary can come from differ service which can use kata_git_diff().	   	   
+	
+- However, this repo could still be useful for simple client-side proof of concept.
+
 - Currently not running branch-coverage.
   See test/coverage.rb
   SimpleCov.start do

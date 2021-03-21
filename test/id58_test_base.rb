@@ -19,12 +19,6 @@ class Id58TestBase < MiniTest::Test
 
   # - - - - - - - - - - - - - - - - - - - - - -
 
-  def self.qtest(hash, &test_block)
-    id58_suffix = hash.keys[0]
-    lines = hash[id58_suffix].join(' ').split('|').join("\n|")
-    test(id58_suffix, lines+"\n\n", &test_block)
-  end
-
   def self.test(id58_suffix, *lines, &test_block)
     source = test_block.source_location
     source_file = File.basename(source[0])
@@ -57,7 +51,7 @@ class Id58TestBase < MiniTest::Test
     if s.length > 80
       # :nocov:
       s[0..80] + '...'
-      # :nocov:      
+      # :nocov:
     else
       s
     end

@@ -38,32 +38,4 @@ class DownloaderTestBase < Id58TestBase
     externals.shell
   end
 
-  # - - - - - - - - - - - - - - -
-
-  def group_exists?(id)
-    model.group_exists?(id)
-  end
-
-  def group_manifest(id)
-    model.group_manifest(id)
-  end
-
-  # - - - - - - - - - - - - - - -
-
-  def kata_exists?(id)
-    model.kata_exists?(id)
-  end
-
-  def kata_manifest(id)
-    model.kata_manifest(id)
-  end
-
-  def kata_events(id)
-    model.kata_events(id)
-  end
-
-  def kata_event(id, index)
-    model.kata_event(id, index)
-  end
-
 end

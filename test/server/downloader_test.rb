@@ -6,6 +6,10 @@ class DownloaderTest < DownloaderTestBase
     'Q96'
   end
 
+  test '23K', %w( raises when id does not exist ) do
+    assert_raises { downloader.download(id:'123456')}
+  end
+
   test '23J', %w( downloader ) do
     id = '5U2J18'
     tgz_filename, tgz_bytes = *downloader.download(id:id)

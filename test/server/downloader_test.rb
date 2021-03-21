@@ -18,24 +18,21 @@ class DownloaderTest < DownloaderTestBase
       )
       tags = shell.assert_exec(
         "cd #{tmp_dir}/cyber-dojo-2020-10-19-#{id}",
-        "git tag"      
+        "git tag"
       )
       assert_equal "0\n1\n2\n3\n", tags
       diff = shell.assert_exec(
         "cd #{tmp_dir}/cyber-dojo-2020-10-19-#{id}",
-        "git diff 2 3"      
+        "git diff 2 3"
       )
       assert diff.include?('-  echo $((6 * 999sss))'), diff
       assert diff.include?('+  echo $((6 * 7))'), diff
       ls_al = shell.assert_exec(
         "cd #{tmp_dir}/cyber-dojo-2020-10-19-#{id}/sandbox",
-        "ls -al"      
-      ) 
-      assert ls_al.include?('test_hiker.sh'), ls_al      
-      test_hiker_sh = shell.assert_exec(
-        "cd #{tmp_dir}/cyber-dojo-2020-10-19-#{id}/sandbox",
-        'cat test_hiker.sh',
+        "ls -al"
       )
+      assert ls_al.include?('test_hiker.sh'), ls_al
+      test_hiker_sh = disk.read_txt("#{tmp_dir}/cyber-dojo-2020-10-19-#{id}/sandbox/test_hiker.sh")
       assert test_hiker_sh.include?('source ./hiker.sh'), test_hiker_sh
     end
   end

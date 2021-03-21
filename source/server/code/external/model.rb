@@ -19,20 +19,6 @@ module External
 
     # - - - - - - - - - - - - - - - - - - -
 
-    def group_exists?(id)
-      @http.get(__method__, { id:id })
-    end
-
-    def group_manifest(id)
-      @http.get(__method__, { id:id })
-    end
-
-    def group_joined(id)
-      @http.get(__method__, { id:id })
-    end
-
-    # - - - - - - - - - - - - - - - - - - -
-
     def kata_exists?(id)
       @http.get(__method__, { id:id })
     end

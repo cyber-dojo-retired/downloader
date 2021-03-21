@@ -14,20 +14,31 @@ module External
       end
     end
 
-    def write(pathed_filename, content)
-      dir = File.dirname(pathed_filename)
-      shell.assert_exec("mkdir -vp #{dir}")
-      File.open(pathed_filename, 'w') do |file|
-        file.write(content)
-      end
+    def write_txt(pathed_filename, string)
+      mkdir(pathed_filename)
+      File.write(pathed_filename, string)
     end
 
-    def binread(pathed_filename)
+    def write_bin(pathed_filename, bytes)
+      mkdir(pathed_filename)
+      File.binwrite(pathed_filename, bytes)
+    end
+    
+    def read_txt(pathed_filename)
+      File.read(pathed_filename)
+    end
+    
+    def read_bin(pathed_filename)
       File.binread(pathed_filename)
     end
-
+        
     private
 
+    def mkdir(pathed_filename)
+      dir_name = File.dirname(pathed_filename)
+      shell.assert_exec("mkdir -vp #{dir_name}")      
+    end
+    
     def shell
       @externals.shell
     end

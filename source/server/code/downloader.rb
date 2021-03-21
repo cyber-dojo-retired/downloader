@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'json'
 
 class Downloader
 
@@ -33,8 +34,8 @@ class Downloader
     remove_all_content_from(git_dir, id)
     sandbox = {}
     files = event.delete('files')
-    files.each do |pathed_filename,content|
-      sandbox["sandbox/{pathed_filename}"] = content
+    files.each do |pathed_filename,json|
+      sandbox["sandbox/#{pathed_filename}"] = json['content']
     end
     save(git_dir, sandbox)
     sss = {}
@@ -62,7 +63,7 @@ class Downloader
 
   def save(git_dir, files)
     files.each do |pathed_filename, content|
-      disk.write("#{git_dir}/#{pathed_filename}", content)
+      disk.write_txt("#{git_dir}/#{pathed_filename}", content)
     end
   end
 
@@ -92,14 +93,14 @@ class Downloader
       tgz_filename = "#{tmp_dir}/#{git_dir}.tgz"
       command = "tar -C #{base_dir} -zcf #{tgz_filename} #{git_dir}"
       shell.assert_exec(command)
-      [tgz_filename, disk.binread(tgz_filename)]
+      ["#{git_dir}.tgz", disk.read_bin(tgz_filename)]
     end
   end
 
   # - - - - - - - - - - - - - - - - - - - -
 
   def disk
-    @external.disk
+    @externals.disk
   end
 
   def model
@@ -107,7 +108,7 @@ class Downloader
   end
 
   def shell
-    @external.shell
+    @externals.shell
   end
 
 end

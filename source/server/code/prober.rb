@@ -15,9 +15,7 @@ class Prober
   end
 
   def ready?(_args)
-    [
-      @externals.model,
-    ].all?(&:ready?)
+    @externals.model.ready?
   end
 
 end

@@ -17,7 +17,7 @@ class ExternalShellerTest < DownloaderTestBase
     error = assert_raises { shell.assert_exec('zzzz') }
     json = JSON.parse(error.message)
     assert_equal '', json['stdout']
-    assert_equal "/bin/sh: zzzz: not found\n", json['stderr']
+    assert_equal "sh: zzzz: not found\n", json['stderr']
     assert_equal 127,  json['exit_status']
   end
 

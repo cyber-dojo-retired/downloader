@@ -3,12 +3,6 @@ with additional files from differ.
 
 Don't offer download_group()
 Instead, from a group allow selection of avatar from 8x8 grid (similar to joining)
-
-The .tgz file when unzipped will produce a directory with a git repo in it.
-
-- Currently getting coverage of all files.
-  Need to drop /usr/... files being covered
-  This should speed up that step a lot
   
 - Currently not running branch-coverage.
   See test/coverage.rb

@@ -22,26 +22,20 @@ class DownloaderTestBase < Id58TestBase
     @prober ||= Prober.new(externals)
   end
 
-  def model
-    # local because tests need more of model's API.
-    @model ||= ::Test::ModelService.new
+  def downloader
+    @downloader ||= Downloader.new(externals)
   end
 
   def disk
     externals.disk
   end
 
-  def git
-    externals.git
+  def model
+    externals.model
   end
 
   def shell
     externals.shell
-  end
-
-
-  def X_model
-    externals.model
   end
 
   # - - - - - - - - - - - - - - -

@@ -6,7 +6,6 @@ class ProberTest < DownloaderTestBase
     '198'
   end
 
-  # - - - - - - - - - - - - - - - - -
   test '191', %w( sha ) do
     sha = prober.sha({})
     assert_equal 40, sha.size
@@ -22,8 +21,6 @@ class ProberTest < DownloaderTestBase
   test '603', %w( ready ) do
     assert true?(prober.ready?({}))
   end
-
-  # - - - - - - - - - - - - - - - - -
 
   test '604', %w(
   |when model http-proxy is not ready

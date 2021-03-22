@@ -14,7 +14,7 @@ with additional files from differ.
   3. Model can delegate to saver.
   4. Model can be dropped.
   -
-  A. Decouple dashboard from saver so it uses only model.  
+  A. Decouple dashboard from saver so it uses only model?
   -
     i. Add v2 storage to saver that stores directly in git format.
    ii. Add kata_git_diff() to saver and use in differ service.
@@ -24,6 +24,7 @@ with additional files from differ.
    iv. Refactor kata_event(id, index)
        It can use [git archive] to get tar file, pipe to untar, into /tmp
 	   To get names of files use [git ls-tree -r TAG]
+	   Then recreate the json response.
 
 - Don't offer download_group()
   Instead, from a group allow selection of avatar from 8x8 grid (similar to joining)
@@ -36,6 +37,10 @@ with additional files from differ.
 	   This is stateless. Just create a tgz file in /tmp
 	   It can only be offered (from UI) for version 2 katas initially.
 	   Later I can provide a migration for v0,v1 repos. 
+	   Migration will need to set dates in the past for git commits.
+	   See https://stackoverflow.com/questions/3895453/how-do-i-make-a-git-commit-in-the-past
+	   Env vars GIT_AUTHOR_DATE GIT_COMMITTER_DATE
+	   
   	 kata_git_diff(id, was_index, now_index)
 	   This can be stateless too.
 	   I just need to use the same trick as differ, get massive context around

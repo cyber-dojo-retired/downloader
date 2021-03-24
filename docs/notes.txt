@@ -1,6 +1,33 @@
 The initial file-structure for this repo was copied from creator
 with additional files from differ.
 
+
+When git is actually being used in v2 then the directory structure 
+will need to be something like this:
+	/sandbox/*
+	  - will hold all the text files the user sees in the browser.
+	    These are the files sent to runner and saved in runner's /sandbox dir.
+	/config/*
+	  - will hold the manifest.json file which never changes
+	    together with the files holding the state of the options
+		eg is prediction on/off, is theme light/dark
+	/events.json    
+	    This will be appended to for each test run
+	/event.json     
+	    This will be the (current) individual test run info.
+
+Each test submission will need to
+o) delete everything in sandbox/
+o) save incoming files in sandbox/
+o) append to events.json
+o) replace event.json
+o) do a git commit and git tag
+
+Each option change, eg prediction on -> off will need to
+o) process its file in config/ as per normal
+o) do a git commit and git tag ????? 
+
+
 - How will model implement its v2 ?
   It will still need to delegate to saver.
   So saver will need a 'batch' API 
@@ -12,7 +39,7 @@ with additional files from differ.
   1. Add model's API to saver.
   2. All clients can now call saver rather than model (one less network hop)
   3. Model can delegate to saver.
-  4. Model can be dropped.
+  4. Saver renamed to model.
   -
   A. Decouple dashboard from saver so it uses only model?
   -

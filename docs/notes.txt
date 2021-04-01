@@ -7,6 +7,20 @@ means that in v2 the group can still be the same as v1. That is, not based on gi
 Only /cyber-dojo/katas/ will use git for v2.
 
 
+It would be nice if v2 in git format would allow a diff to happen
+really fast as a saver service. Viz to allow differ to not need
+to get was_files and now_files and then do a diff.
+However it is not clear this is possible. The problem is, I think,
+that a git diff does not show output for files that are 
+o) renamed with no change 
+o) completely unchanged 
+And differ needs this info. Particularly unchanged files.
+So it may be that differ() will actually end up being a bit slower in v2.
+Viz the only real motivating case for v2 is downloading.
+So I want the files stored in the v2 git repo to be exactly as I want them.
+And a download will literally just tgz the whole git repo.
+
+
 When git is actually being used in v2 then the directory structure 
 will need to be something like this:
 	/sandbox/*
@@ -33,6 +47,7 @@ o) Now have to be very careful about next commit...
 Each test submission will need to
 o) delete everything in sandbox/
 o) save incoming files in sandbox/
+   - Do this as a dir rename to be atomic.
 o) do NOT replace config/
 o) append to events.json
 o) replace event.json
@@ -43,29 +58,29 @@ o) do a git add .
 
 
 
-- How will model implement its v2 ?
-  It will still need to delegate to saver.
-  So saver will need a 'batch' API 
-
-
 - How to implement v2 kata_event(id, index)
-  This will be needed eg to get the populated-manifest arg for kata_create() when forking.
+  This will be needed by differ.
 
-- $ git archive --format=tar treeish
-  This can be piped to tar to create a snapshot of treeish in /tmp
-  eg $ git archive --format=tar ${TAG} | (cd ${TMP_DIR} && tar -xf -)
+  - $ git archive --format=tar treeish
+    This can be piped to tar to create a snapshot of treeish in /tmp
+    eg $ git archive --format=tar ${TAG} | (cd ${TMP_DIR} && tar -xf -)
+    Then I need to read the files back in.
+    How to get the names of the files...
+
+  - $ git ls-tree -r treeish
+    This lists all files in treeish and can be used to know what files
+    to read from TMP_DIR populated by the above git archive command.
+    Output looks like this...
+    100644 blob b1a17ba136936531b72571844a773fe938b85ad4	a/b/zzz.txt
+    100644 blob 0b20aead00e76e9afc1ee8775b2705c77e790cf6	a/yyy.txt
+    100644 blob 72943a16fb2c8f38f9dde202b7a70ccc19c52f34	aaa.txt
+    100644 blob d6459e005434a49a66a3ddec92279a86160ad71f	xxx.txt
+    So
+       files['/sandbox/a/b/zzz.txt'] = read("#{DIR}/a/b/zzz.txt")
+       ...
 
 
-- $ git ls-tree -r treeish
-  This lists all files in treeish and can be used to know what files
-  to read from the git archive command.
-  Output looks like this...
-  100644 blob b1a17ba136936531b72571844a773fe938b85ad4	a/b/zzz.txt
-  100644 blob 0b20aead00e76e9afc1ee8775b2705c77e790cf6	a/yyy.txt
-  100644 blob 72943a16fb2c8f38f9dde202b7a70ccc19c52f34	aaa.txt
-  100644 blob d6459e005434a49a66a3ddec92279a86160ad71f	xxx.txt
-  So
-     files['a/b/zzz.txt'] = read('a/b/zzz.txt')
+
 
 
 - TODOS

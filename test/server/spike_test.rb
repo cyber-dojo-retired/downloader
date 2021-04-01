@@ -11,28 +11,29 @@ class SpikeTest < DownloaderTestBase
   test '19e', %w( spike ) do
     Dir.mktmpdir do |dir|
       @dir = dir
-      cd_exec('git init')
+      cd_exec("git init")
       cd_exec("git config user.name 'spike'")
       cd_exec("git config user.email 'spike@cyber-dojo.org'")
-      write_txt('aaa.txt', 'aaa')
-      write_txt('s/pike/bbb.txt', 'bbb')
-      cd_exec('git add .')
-      cd_exec("git commit -m '1'")
-      cd_exec('git tag 1')
-      tar = cd_exec("git archive --format=tar 1")
+      write_txt("aaa.txt", "aaa")
+      write_txt("s/pike/bbb.txt", "bbb")
+      cd_exec("git add .")
+      tag = 1
+      cd_exec("git commit -m '#{tag}'")
+      cd_exec("git tag #{tag}")
+      tar = cd_exec("git archive --format=tar #{tag}")
       reader = TarFile::Reader.new(tar)
       files = reader.files.each.with_object({}) do |(path,content),memo|
-        if path == 'pax_global_header'
+        if path == "pax_global_header"
           next
         end
-        if path.end_with?('/')
+        if path.end_with?("/")
           next
         end
         memo[path] = content
       end
-      assert_equal ['aaa.txt', 's/pike/bbb.txt'], files.keys.sort
-      assert_equal 'aaa', files['aaa.txt']
-      assert_equal 'bbb', files['s/pike/bbb.txt']
+      assert_equal ["aaa.txt", "s/pike/bbb.txt"], files.keys.sort
+      assert_equal "aaa", files["aaa.txt"]
+      assert_equal "bbb", files["s/pike/bbb.txt"]
     end
   end
 

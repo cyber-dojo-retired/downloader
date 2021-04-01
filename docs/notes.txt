@@ -62,24 +62,19 @@ o) do a git add .
   This will be needed by differ.
 
   - $ git archive --format=tar treeish
-    This can be piped to tar to create a snapshot of treeish in /tmp
-    eg $ git archive --format=tar ${TAG} | (cd ${TMP_DIR} && tar -xf -)
-    Then I need to read the files back in.
-    How to get the names of the files...
-
-  - $ git ls-tree -r treeish
-    This lists all files in treeish and can be used to know what files
-    to read from TMP_DIR populated by the above git archive command.
-    Output looks like this...
-    100644 blob b1a17ba136936531b72571844a773fe938b85ad4	a/b/zzz.txt
-    100644 blob 0b20aead00e76e9afc1ee8775b2705c77e790cf6	a/yyy.txt
-    100644 blob 72943a16fb2c8f38f9dde202b7a70ccc19c52f34	aaa.txt
-    100644 blob d6459e005434a49a66a3ddec92279a86160ad71f	xxx.txt
-    So
-       files['/sandbox/a/b/zzz.txt'] = read("#{DIR}/a/b/zzz.txt")
-       ...
-
-
+    The writes a tgz stream to stdout.
+    It should be possible to read the tgz file in memory, like runner does.
+    
+      tgz = shell.capture("cd #{repo_dir} && git archive --format=tar #{tag}")
+      unzipped = Gnu.unzip(tgz)
+      reader = TarFile::Reader.new(unzipped)
+      files = reader.files.each.with_object({}) do |(filename,content),memo|
+        memo[filename] = content
+      end
+      # Now files needs to be put into the correct format
+      #   - drop sandbox/ 
+      #   - process stdout/stderr/status
+      # No need for an external `git ls-tree -r treeish` command
 
 
 

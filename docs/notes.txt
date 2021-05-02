@@ -23,7 +23,7 @@ And a download will literally just tgz the whole git repo.
 
 When git is actually being used in v2 then the directory structure 
 will need to be something like this:
-	/sandbox/*
+	/files/*
 	  - will hold all the text files the user sees in the browser.
 	    These are the files sent to runner and saved in runner's /sandbox dir.
 	/config/*
@@ -31,7 +31,7 @@ will need to be something like this:
 	    together with the files holding the state of the options
 		eg is prediction on/off, is theme light/dark
 	/events.json    
-	    This will be appended to for each test run
+	    This will be appended to for each test run. Useful cache for dashboard
 	/event.json     
 	    This will be the (current) individual test run info.
       I could extract stdout/stderr/status from this and save them as files.
@@ -72,7 +72,7 @@ o) do a git add .
         memo[filename] = content
       end
       # Now files needs to be put into the correct format
-      #   - drop sandbox/ 
+      #   - drop files/ prefix
       #   - process stdout/stderr/status
       # No need for an external `git ls-tree -r treeish` command
 
